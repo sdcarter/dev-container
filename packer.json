@@ -1,0 +1,27 @@
+{
+    "builders":[
+        {
+            "type": "docker",
+            "image": "debian:latest",
+            "commit": true
+        }
+    ],
+    "provisioners":[
+        {
+            "type": "shell",
+            "script": "install.sh"
+
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "./playbook.yml"
+        }
+    ],
+    "post-processors":[
+        {
+            "type": "docker-tag",
+            "repository": "sdcarter/dev-container",
+            "tag": "latest"
+        }
+    ]
+}

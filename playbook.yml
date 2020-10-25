@@ -1,0 +1,10 @@
+- name: Configure Development Container
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+    - name: Install Base Packages
+      apt:
+        pkg:
+        - git
+        - zsh
