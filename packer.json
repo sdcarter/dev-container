@@ -1,27 +1,33 @@
 {
-    "builders":[
-        {
-            "type": "docker",
-            "image": "debian:latest",
-            "commit": true
-        }
+    "builders": [
+      {
+        "commit": true,
+        "image": "debian:latest",
+        "type": "docker"
+      }
     ],
-    "provisioners":[
+    "post-processors": [
+      [
         {
-            "type": "shell",
-            "script": "install.sh"
-
+          "repository": "sdcarter/dev-container",
+          "tags": [
+            "latest"
+          ],
+          "type": "docker-tag"
         },
         {
-            "type": "ansible",
-            "playbook_file": "./playbook.yml"
+          "type": "docker-push"
         }
+      ]
     ],
-    "post-processors":[
-        {
-            "type": "docker-tag",
-            "repository": "sdcarter/dev-container",
-            "tag": "latest"
-        }
+    "provisioners": [
+      {
+        "script": "install.sh",
+        "type": "shell"
+      },
+      {
+        "playbook_file": "./playbook.yml",
+        "type": "ansible"
+      }
     ]
-}
+  }
