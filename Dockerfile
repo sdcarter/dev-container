@@ -9,6 +9,5 @@ RUN apt-get install -y git zsh vim make
 # Python development capabilities
 RUN apt-get install -y python
 
-# Ruby development capabilities
-RUN apt-get install -y ruby ruby-dev 
-RUN gem install jekyll
+# Go development capabilities
+RUN apt-get install -y golang
