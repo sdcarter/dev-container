@@ -26,7 +26,7 @@
         "inline": [
           "apt-get update",
           "apt-get install -y apt-utils",
-          "apt-get install -y git golang zsh"
+          "apt-get install -y git golang python ruby zsh"
         ]
       }
     ]
