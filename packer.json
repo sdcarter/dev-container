@@ -22,12 +22,11 @@
     ],
     "provisioners": [
       {
-        "script": "install.sh",
-        "type": "shell"
-      },
-      {
-        "playbook_file": "./playbook.yml",
-        "type": "ansible"
+        "type": "shell",
+        "inline": [
+          "apt-get update",
+          "apt-get install -y git zsh golang"
+        ]
       }
     ]
   }
