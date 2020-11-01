@@ -1,0 +1,33 @@
+{
+    "builders": [
+      {
+        "commit": true,
+        "image": "debian:latest",
+        "type": "docker"
+      }
+    ],
+    "post-processors": [
+      [
+        {
+          "repository": "sdcarter/dev",
+          "tags": [
+            "latest"
+          ],
+          "type": "docker-tag"
+        },
+        {
+          "type": "docker-push"
+        }
+      ]
+    ],
+    "provisioners": [
+      {
+        "type": "shell",
+        "inline": [
+          "apt-get update",
+          "apt-get install -y apt-utils",
+          "apt-get install -y git golang zsh"
+        ]
+      }
+    ]
+  }
