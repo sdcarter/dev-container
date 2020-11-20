@@ -37,12 +37,7 @@ RUN apt-get update -y && \
     zsh \
     && rm -rf /var/lib/apt/lists/*
 
-# Installaing Docker Client and Docker Compose
-RUN curl -Ssl https://get.docker.com | sh
-
-# # Installing Additional PIP based libraries
-# RUN pip3 install \
-#     awscli
+#### Installing Language/Interpreter Packages outside apt
 
 # Installing + Setting Up GO Environment
 ENV GOLANG_VERSION 1.15.5
@@ -51,35 +46,46 @@ ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
 	&& sudo tar -C /usr/local -xzf golang.tar.gz \
 	&& rm golang.tar.gz
-
-# Setting up GOPATH. For me, i'm using $HOME/code/go
+	
 ENV HOME /root
 ENV GOPATH $HOME/code/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-# Installing Terraform 
+# Installing node
+RUN curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+RUN sudo apt-get install -y nodejs
+
+#### Installing development packages
+
+# Go packages
+RUN go get -u github.com/jingweno/ccat
+RUN go get -u github.com/spf13/cobra
+RUN go get github.com/spf13/cobra/cobra
+
+#### Installing alternate tools
+
+# Installing pinned Terraform version
 ENV TERRAFORM_VERSION 0.13.5
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip
 RUN unzip terraform.zip  -d /usr/local/bin  
 RUN rm terraform.zip
 
-# Installing go packages
-RUN go get -u github.com/jingweno/ccat
-RUN go get -u github.com/spf13/cobra
-RUN go get github.com/spf13/cobra/cobra
+# Installaing Docker Client and Docker Compose
+RUN curl -Ssl https://get.docker.com | sh
 
-# Installing gcloud
+# Installing latest gcloud sdk
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 RUN sudo apt-get update && \
 	sudo apt-get install -y google-cloud-sdk
 
-# # Node
-# RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
-# RUN apt-get install -y nodejs
-# RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
-#     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
-#     && apt-get update && sudo apt-get install yarn 	
+# Installing latest AWS client
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN sudo aws/install
+RUN rm -fr aws awscliv2.zip
+
+#### Finalizing Environment
 
 # Setting WORKDIR and USER
 USER root
