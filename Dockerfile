@@ -109,7 +109,7 @@ RUN go get -u github.com/spf13/cobra
 # Setting WORKDIR and USER
 USER root
 WORKDIR /root
-VOLUME ["/home/dev"]
+# VOLUME ["/home/dev"]
 
 ADD .zshrc /root/.zshrc
 CMD ["/bin/zsh", "-l"]
