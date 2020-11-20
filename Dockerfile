@@ -1,13 +1,13 @@
 FROM ubuntu:20.04
 LABEL maintainer="Steve Carter <steve@sdcarter.com>"
 LABEL version="1.0"
-LABEL description="this is my base image with various dev tools that I use on a daily basis"
+LABEL description="Daily Development Tools"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Installing required packages
-RUN apt-get update -y && \
-    apt-get install --no-install-recommends -y \
+RUN apt-get update -y \
+    && apt-get install --no-install-recommends -y \
     apt-transport-https \
     apt-utils \
     build-essential \
@@ -35,7 +35,7 @@ RUN apt-get update -y && \
     vim \
     wget \
     zsh \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt
 
 #### Installing Language/Interpreter Packages outside apt
 
@@ -53,7 +53,8 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Installing node
 RUN curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-RUN sudo apt-get install -y nodejs
+RUN sudo apt-get install -y nodejs \
+    && rm -rf /var/lib/apt
 
 #### Installing development packages
 
@@ -62,13 +63,13 @@ RUN go get -u github.com/jingweno/ccat
 RUN go get -u github.com/spf13/cobra
 RUN go get github.com/spf13/cobra/cobra
 
-#### Installing alternate tools
+#### Installing devops/cloud tools
 
 # Installing pinned Terraform version
 ENV TERRAFORM_VERSION 0.13.5
-RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip
-RUN unzip terraform.zip  -d /usr/local/bin  
-RUN rm terraform.zip
+RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip \
+    && unzip terraform.zip -d /usr/local/bin \
+    && rm terraform.zip
 
 # Installaing Docker Client and Docker Compose
 RUN curl -Ssl https://get.docker.com | sh
@@ -76,14 +77,15 @@ RUN curl -Ssl https://get.docker.com | sh
 # Installing latest gcloud sdk
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-RUN sudo apt-get update && \
-	sudo apt-get install -y google-cloud-sdk
+RUN sudo apt-get update \
+	&& sudo apt-get install -y google-cloud-sdk \
+    && rm -rf /var/lib/apt
 
 # Installing latest AWS client
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN sudo aws/install
-RUN rm -fr aws awscliv2.zip
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && sudo aws/install \
+    rm -fr aws awscliv2.zip
 
 #### Finalizing Environment
 
