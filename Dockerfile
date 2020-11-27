@@ -1,7 +1,4 @@
 FROM ubuntu:20.04
-LABEL maintainer="Steve Carter <steve@sdcarter.com>"
-LABEL version="1.0"
-LABEL description="Daily Development Tools"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -42,11 +39,9 @@ RUN apt-get update -y \
 # Installing + Setting Up GO Environment
 ENV GOLANG_VERSION 1.15.5
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
-
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
 	&& sudo tar -C /usr/local -xzf golang.tar.gz \
 	&& rm golang.tar.gz
-	
 ENV HOME /root
 ENV GOPATH $HOME/code/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
