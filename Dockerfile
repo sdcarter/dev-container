@@ -61,7 +61,7 @@ RUN go get github.com/spf13/cobra/cobra
 #### Installing devops/cloud tools
 
 # Installing pinned Terraform version
-ENV TERRAFORM_VERSION 0.14.0
+ENV TERRAFORM_VERSION 0.14.2
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip \
     && unzip terraform.zip -d /usr/local/bin \
     && rm terraform.zip
