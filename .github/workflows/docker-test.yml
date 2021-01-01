@@ -4,12 +4,12 @@ on:
   push:
     # Publish `main` as Docker `latest` image.
     branches:
-      - *
+      - '**'
 
   # Run tests for any PRs.
   pull_request:
     branches:
-      - *
+      - '**'
 
 jobs:
   # Run tests.
