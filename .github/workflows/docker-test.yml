@@ -8,8 +8,6 @@ on:
 
   # Run tests for any PRs.
   pull_request:
-    branches:
-      - '**'
 
 jobs:
   # Run tests.
