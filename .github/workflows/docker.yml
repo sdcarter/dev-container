@@ -4,7 +4,7 @@ on:
   push:
     # Publish `main` as Docker `latest` image.
     branches:
-      - main
+      - '**'
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -18,14 +18,34 @@ env:
   IMAGE_NAME: image
 
 jobs:
-  # Push image to GitHub Packages.
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build --no-cache
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file Dockerfile --no-cache
+          fi
+
+  # Publish image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
+  publish:
     # Ensure test job passes before pushing image.
     needs: test
 
-    runs-on: ubuntu-latest
+    # Ensure all publish events happen only on main
     if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main'
+    
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
