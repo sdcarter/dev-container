@@ -41,9 +41,8 @@ jobs:
     # Ensure test job passes before pushing image.
     needs: test
 
-    # Ensure all publish events happen only on main
-    if: github.event_name == 'push'
-    if: github.ref == 'refs/heads/main'
+    # Ensure all publish events happen only on main push operations
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     runs-on: ubuntu-latest
 
