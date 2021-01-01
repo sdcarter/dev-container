@@ -4,7 +4,7 @@ on:
   push:
     # Publish `main` as Docker `latest` image.
     branches:
-      - main
+      - '**'
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -35,14 +35,17 @@ jobs:
             docker build . --file Dockerfile --no-cache
           fi
 
-  # Push image to GitHub Packages.
+  # Publish image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
+  publish:
     # Ensure test job passes before pushing image.
     needs: test
 
-    runs-on: ubuntu-latest
+    # Ensure all publish events happen only on main
     if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main'
+    
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
