@@ -22,8 +22,6 @@ RUN apt-get update -y \
     python3-pip \
     python3-setuptools \
     rsync \
-    ruby-dev \
-    ruby \
     snapd \
     ssh \
     sudo \
@@ -37,7 +35,7 @@ RUN apt-get update -y \
 #### Installing Language/Interpreter Packages outside apt
 
 # Installing + Setting Up GO Environment
-ENV GOLANG_VERSION 1.16.2
+ENV GOLANG_VERSION 1.16.3
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
 	&& sudo tar -C /usr/local -xzf golang.tar.gz \
