@@ -12,6 +12,9 @@ on:
 
   # Run tests for any PRs.
   pull_request:
+  
+  schedule:
+    - cron: '0 0 0 * *'  # every week
 
 env:
   # TODO: Change variable to your image's name.
