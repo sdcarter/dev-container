@@ -14,7 +14,8 @@ on:
   pull_request:
   
   schedule:
-    - cron: '0 0 0 * *'  # every week
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '00 00 * * 1'
 
 env:
   # TODO: Change variable to your image's name.
