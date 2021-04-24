@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
