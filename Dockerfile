@@ -35,7 +35,8 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt
 
 # Installaing Docker Client and Docker Compose
-RUN curl -Ssl https://get.docker.com | sh
+RUN curl -Ssl https://get.docker.com | sh \
+    && rm -rf /var/lib/apt
 
 #### Installing Language/Interpreter packages
 
@@ -57,7 +58,6 @@ RUN sudo apt-get install -y nodejs \
 #### Installing development packages
 
 # Go packages
-RUN go get -u github.com/jingweno/ccat
 RUN go get -u github.com/spf13/cobra
 RUN go get github.com/spf13/cobra/cobra
 
