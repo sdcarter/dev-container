@@ -47,7 +47,7 @@ RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
 	&& sudo tar -C /usr/local -xzf golang.tar.gz \
 	&& rm golang.tar.gz
 ENV HOME /root
-ENV GOPATH $HOME/code/go
+ENV GOPATH $HOME/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Installing node
