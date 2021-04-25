@@ -56,15 +56,17 @@ RUN go get -u github.com/jingweno/ccat
 RUN go get -u github.com/spf13/cobra
 RUN go get github.com/spf13/cobra/cobra
 
-#### Installing devops/cloud tools
-
-# Installing latest Terraform version
-RUN curl $(curl -sL https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].builds[].url | select(.|test("alpha|beta|rc")|not) | select(.|contains("linux_amd64"))' | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1) -o terraform.zip \
-    && unzip terraform.zip -d /usr/local/bin \
-    && rm terraform.zip
+#### Installing local container development
 
 # Installaing Docker Client and Docker Compose
 RUN curl -Ssl https://get.docker.com | sh
+
+#### Installing devops/cloud tools
+
+# installing tfenv and the lateest version of terraform
+RUN export GIT_SSL_NO_VERIFY=1 && git clone https://github.com/tfutils/tfenv.git ~/.tfenv
+RUN ln -s ~/.tfenv/bin/* /usr/local/bin/
+RUN tfenv install
 
 # Installing latest gcloud sdk
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -79,7 +81,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     && sudo aws/install \
     && rm -fr aws awscliv2.zip
 
-#### Finalizing Environment
+#### Finalize Environment
 
 # Setting WORKDIR and USER
 USER root
