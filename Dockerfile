@@ -2,7 +2,9 @@ FROM debian:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Installing required packages
+### Environment software configuration
+
+# Installing required apt packages
 RUN apt-get update -y \
     && apt-get install --no-install-recommends -y \
     apt-transport-https \
@@ -32,7 +34,10 @@ RUN apt-get update -y \
     zsh \
     && rm -rf /var/lib/apt
 
-#### Installing Language/Interpreter Packages outside apt
+# Installaing Docker Client and Docker Compose
+RUN curl -Ssl https://get.docker.com | sh
+
+#### Installing Language/Interpreter packages
 
 # Installing + Setting Up GO Environment
 ENV GOLANG_VERSION 1.16.3
@@ -56,17 +61,13 @@ RUN go get -u github.com/jingweno/ccat
 RUN go get -u github.com/spf13/cobra
 RUN go get github.com/spf13/cobra/cobra
 
-#### Installing local container development
-
-# Installaing Docker Client and Docker Compose
-RUN curl -Ssl https://get.docker.com | sh
-
 #### Installing devops/cloud tools
 
 # installing tfenv and the lateest version of terraform
 RUN export GIT_SSL_NO_VERIFY=1 && git clone https://github.com/tfutils/tfenv.git ~/.tfenv
 RUN ln -s ~/.tfenv/bin/* /usr/local/bin/
 RUN tfenv install
+RUN tfenv use $(tfenv list | head -n 1)
 
 # Installing latest gcloud sdk
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -87,5 +88,6 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 USER root
 WORKDIR /root
 
+# enabling default shell
 ADD .zshrc /root/.zshrc
 CMD ["/bin/zsh", "-l"]
