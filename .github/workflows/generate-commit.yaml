@@ -19,7 +19,7 @@ jobs:
         
       - name: Generate last-commit
         run: |
-          date +%s > meta/last-commit
+          date +%s > meta/last-gh-commit
         
       - name: Commit
         run: |
