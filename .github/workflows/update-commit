@@ -1,0 +1,27 @@
+name: Commit
+
+on:
+  schedule:
+    - cron: "* * 0 * *"
+
+jobs:
+  generate-commit:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Generate last-commit
+        run: |
+          date +%s > meta/last-commit
+        
+      - name: Commit
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add --all
+          git commit -am "update last-commit"
+          git push 
