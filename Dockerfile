@@ -24,6 +24,7 @@ RUN apt-get update -y \
     python3-pip \
     python3-setuptools \
     rsync \
+    ruby-full \
     snapd \
     ssh \
     sudo \
@@ -50,10 +51,11 @@ ENV HOME /root
 ENV GOPATH $HOME/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-# Installing node
+# Installing node & upgrading npm to most recent version
 RUN curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 RUN sudo apt-get install -y nodejs \
     && rm -rf /var/lib/apt
+RUN npm install -g npm@next
 
 #### Installing development packages
 
@@ -88,6 +90,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 USER root
 WORKDIR /root
 
-# enabling default shell
+# enabling local configs
+ADD .gitconfig /root/.gitconfig
 ADD .zshrc /root/.zshrc
 CMD ["/bin/zsh", "-l"]
