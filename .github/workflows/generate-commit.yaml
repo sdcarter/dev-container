@@ -1,0 +1,30 @@
+name: Commit
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '00 00 * * 1'
+
+jobs:
+  generate-commit:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Generate last-commit
+        run: |
+          date +%s > meta/last-gh-commit
+        
+      - name: Commit
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add --all
+          git commit -am "update last-commit"
+          git push 

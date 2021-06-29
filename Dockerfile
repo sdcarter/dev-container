@@ -42,7 +42,7 @@ RUN curl -Ssl https://get.docker.com | sh \
 #### Installing Language/Interpreter packages
 
 # Installing + Setting Up GO Environment
-ENV GOLANG_VERSION 1.16.3
+ENV GOLANG_VERSION 1.16.5
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
 	&& sudo tar -C /usr/local -xzf golang.tar.gz \
